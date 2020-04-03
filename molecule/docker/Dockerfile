@@ -1,4 +1,11 @@
-FROM centos:7
+FROM registry.redhat.io/rhel7:latest
+
+# Build Arguments
+ARG rhn_user
+ARG rhn_pass
+
+# Register
+RUN subscription-manager register --username=$rhn_user --password=$rhn_pass --auto-attach
 
 # Install systemd -- See https://hub.docker.com/_/centos/
 RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
@@ -12,19 +19,12 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-# Install Ansible
-RUN yum -y install epel-release openssh-server audit authconfig
-RUN yum -y install git ansible sudo anacron
+# Install
+RUN yum -y install openssh-server audit authconfig initscripts
 RUN yum clean all
 
 # Fix for Travis docker containers
 RUN mkdir /var/log/audit; chmod 700 /var/log/audit;
-
-# Disable requiretty
-RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
-
-# Install Ansible inventory file
-RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
 
 VOLUME ["/sys/fs/cgroup", "/var/log/audit"]
 
