@@ -1,7 +1,7 @@
 Getting started
 ===============
 
-This role is part of the `Ansible Lockdown`_ project and can be used as a 
+This role is part of the `Ansible Lockdown`_ project and can be used as a
 standalone role or it can be used along with other Ansible roles and playbooks.
 
 .. _Ansible Lockdown: https://github.com/ansible/ansible-lockdown
@@ -35,7 +35,7 @@ is provided with your Ansible installation:
 
 .. code-block:: console
 
-   ansible-galaxy install git+https://github.com/mindpointgroup/rhel7-stig
+   ansible-galaxy install git+https://github.com/PolarisAlpha/rhel7-stig
 
 The ``ansible-galaxy`` command will install the role into
 ``/etc/ansible/roles/rhel7-stig`` and this makes it easy to use with
@@ -49,7 +49,7 @@ Start by cloning the role into a directory of your choice:
 .. code-block:: console
 
    mkdir -p ~/.ansible/roles/
-   git clone https://github.com/mindpointgroup/rhel7-stig ~/.ansible/roles/rhel7-stig
+   git clone https://github.com/PolarisAlpha/rhel7-stig ~/.ansible/roles/rhel7-stig
 
 Ansible looks for roles in ``~/.ansible/roles`` by default.
 
