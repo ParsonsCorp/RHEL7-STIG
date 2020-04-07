@@ -1,34 +1,37 @@
-import crypt
-import sys
-from random import SystemRandom, shuffle
-import string
 try:
     import passlib.hash
-    from passlib.hash import grub_pbkdf2_sha512
     HAS_PASSLIB = True
-except:
+    PASSLIB_VERSION = float(passlib.__version__[:3])
+except ImportError as e:
     HAS_PASSLIB = False
 
-def grub2_hash(password, hashtype='sha512', salt=None):
+from ansible import errors
 
-    cryptmethod = {
-        'md5': '1',
-        'blowfish': '2a',
-        'sha256': '5',
-        'sha512': '6',
-    }
 
-    if salt is None:
-        r = SystemRandom()
-        salt = ''.join([r.choice(string.ascii_letters + string.digits) for _ in range(64)])
+def grub2_hash(password, salt=None, iterations=25000):
+    # Build list of keyword arguments to pass into hash/encrypt method
+    kwargs = dict()
 
+    if salt:
+        # passlib generates a random salt of 64 byte length by default (recommended)
+        kwargs['salt'] = salt.encode()
+
+    if iterations:
+        # passlib does 25000 rounds (in version 1.7) by default (recommended or set to a higher value)
+        kwargs['rounds'] = iterations
+
+    # Make sure we have passlib and the correct version
     if not HAS_PASSLIB:
-        if sys.platform.startswith('darwin'):
-            raise errors.AnsibleFilterError('|password_hash requires the passlib python module to generate password hashes on Mac OS X/Darwin')
-        saltstring =  "$%s$%s" % (cryptmethod[hashtype],salt)
-        encrypted = crypt.crypt(password, salt=salt)
+        raise errors.AnsibleFilterError('grub2_hash requires the passlib python module to generate password hashes')
+
+    if PASSLIB_VERSION < 1.5:
+        raise errors.AnsibleFilterError('passlib >= 1.5 is required and %s is installed' % PASSLIB_VERSION)
+
+    elif PASSLIB_VERSION < 1.7:
+        encrypted = passlib.hash.grub_pbkdf2_sha512.encrypt(password, **kwargs)
+
     else:
-        encrypted = grub_pbkdf2_sha512.hash(password)
+        encrypted = passlib.hash.grub_pbkdf2_sha512.using(**kwargs).hash(password)
 
     return encrypted
 
@@ -39,7 +42,3 @@ class FilterModule(object):
         return {
             'grub2_hash': grub2_hash
         }
-
-
-
-

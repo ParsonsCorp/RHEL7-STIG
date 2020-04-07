@@ -1,6 +1,36 @@
-*.pyc
+.env
+*.log
 *.retry
-Vagrantfile
 .vagrant
+tests/*redhat-subscription
+tests/Dockerfile
+*.iso
+*.box
+packer_cache
+delete*
+ignore*
+# VSCode
+.vscode
 
-*.retry
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# DS_Store
+.DS_Store
+._*
+
+# Linux Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+*.swp
+*.swo
+rh-creds.env
+travis.env
