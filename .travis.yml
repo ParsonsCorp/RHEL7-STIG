@@ -19,9 +19,9 @@ before_install:
   # Pull container.
   - 'docker pull ${container}'
   - 'if [ ${distro} = "rhel" ]; then
-        docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+        docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro} --tag=${distro}-${version}:ansible tests;
     else
-        docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+        docker build --rm=true --file=tests/Dockerfile.${distro} --tag=${distro}-${version}:ansible tests;
     fi'
 
 script:
