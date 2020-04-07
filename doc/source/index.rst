@@ -2,19 +2,19 @@
 Automated security hardening for Linux hosts with Ansible
 =========================================================
 
-.. image:: https://secure.travis-ci.org/MindPointGroup/RHEL7-STIG.svg?branch=devel
+.. image:: https://secure.travis-ci.org/PolarisAlpha/RHEL7-STIG.svg?branch=devel
    :alt: Build Status Badge
-   :target: https://travis-ci.org/MindPointGroup/RHEL7-STIG
+   :target: https://travis-ci.org/PolarisAlpha/RHEL7-STIG
 
 .. raw:: html
 
-    <p><iframe src="https://ghbtns.com/github-btn.html?user=MindPointGroup&repo=RHEL7-STIG&type=watch&count=true&size=large&v=2"
+    <p><iframe src="https://ghbtns.com/github-btn.html?user=PolarisAlpha&repo=RHEL7-STIG&type=watch&count=true&size=large&v=2"
     allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe></p>
 
 What does the role do?
 ----------------------
-This role uses the |stig_name| `Security Technical Implementation Guide (STIG)`_ guidance 
-from the `Defense Information Systems Agency (DISA)`_. The STIG is released with a 
+This role uses the |stig_name| `Security Technical Implementation Guide (STIG)`_ guidance
+from the `Defense Information Systems Agency (DISA)`_. The STIG is released with a
 public domain license and it is commonly used to secure systems at public and private
 organizations around the world.
 
@@ -74,4 +74,4 @@ These are not yet supported but are on the target list.
   * Debian 8 Jessie
   * Fedora 26
   * openSUSE Leap 42.2 and 42.3
-  * SUSE Linux Enterprise 12 
+  * SUSE Linux Enterprise 12

@@ -92,7 +92,7 @@ rst_prolog = """
 # version = version_info.canonical_version_string()
 
 # openstackdocstheme options
-# repository_name = 'mindpointgroup/' + target_name
+# repository_name = 'PolarisAlpha/' + target_name
 # bug_project = project.lower()
 # bug_tag = ''
 
