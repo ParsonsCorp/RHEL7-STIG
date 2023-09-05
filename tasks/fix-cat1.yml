@@ -65,6 +65,7 @@
 - name: "HIGH | RHEL-07-010290 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   ansible.builtin.replace:
       dest: "{{ item }}"
+      follow: true
       regexp: 'nullok ?'
   when: rhel_07_010290
   with_items:
@@ -383,47 +384,47 @@
               rhel_07_021350_default_grub_missing_audit is not changed
         notify: make grub2 config
 
-      - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-        ansible.builtin.replace:
-            path: /etc/default/grub
-            regexp: "{{ rhel7stig_regexp_quoted_params }}"
-            replace: "{{ rhel7stig_replace_quoted_params }}"
-        with_items:
-            - "{{ ansible_mounts | json_query(query) }}"
-        vars:
-            query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
-            key: GRUB_CMDLINE_LINUX
-            param: boot
-            value: UUID={{ item.uuid }}
-            insert: yes
-        when:
-            - rhel7stig_boot_part not in ['/', '']
-            - not ansible_check_mode or
-              rhel_07_021350_default_grub_missing_audit is not changed
-        notify: make grub2 config
-        register: result
+    #   - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
+    #     ansible.builtin.replace:
+    #         path: /etc/default/grub
+    #         regexp: "{{ rhel7stig_regexp_quoted_params }}"
+    #         replace: "{{ rhel7stig_replace_quoted_params }}"
+    #     with_items:
+    #         - "{{ ansible_mounts | json_query(query) }}"
+    #     vars:
+    #         query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
+    #         key: GRUB_CMDLINE_LINUX
+    #         param: boot
+    #         value: UUID={{ item.uuid }}
+    #         insert: yes
+    #     when:
+    #         - rhel7stig_boot_part not in ['/', '']
+    #         - not ansible_check_mode or
+    #           rhel_07_021350_default_grub_missing_audit is not changed
+    #     notify: make grub2 config
+    #     register: result
 
-      - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
-        command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
-        check_mode: no
-        with_items:
-            - fips=1
-            - boot=UUID={{ ansible_mounts | json_query(query) }}
-        vars:
-            query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
-        register: rhel_07_021350_audit
-        when:
-            - not ansible_check_mode or
-              rhel_07_021350_default_grub_missing_audit is not changed
-            - rhel7stig_boot_part not in ['/', ''] or
-              'boot=' not in item
-        changed_when:
-            - ansible_check_mode
-            - rhel_07_021350_audit is failed
-        failed_when:
-            - rhel_07_021350_audit is failed
-            - not ansible_check_mode or
-              rhel_07_021350_audit.rc > 1
+    #   - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
+    #     command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
+    #     check_mode: no
+    #     with_items:
+    #         - fips=1
+    #         - boot=UUID={{ ansible_mounts | json_query(query) }}
+    #     vars:
+    #         query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
+    #     register: rhel_07_021350_audit
+    #     when:
+    #         - not ansible_check_mode or
+    #           rhel_07_021350_default_grub_missing_audit is not changed
+    #         - rhel7stig_boot_part not in ['/', ''] or
+    #           'boot=' not in item
+    #     changed_when:
+    #         - ansible_check_mode
+    #         - rhel_07_021350_audit is failed
+    #     failed_when:
+    #         - rhel_07_021350_audit is failed
+    #         - not ansible_check_mode or
+    #           rhel_07_021350_audit.rc > 1
   when: rhel_07_021350
   tags:
       - RHEL-07-021350

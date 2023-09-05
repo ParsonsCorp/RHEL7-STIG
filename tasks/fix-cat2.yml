@@ -800,8 +800,6 @@
   check_mode: no
   changed_when: no
   failed_when: no
-  args:
-      warn: no
   register: rhel_07_020260_yum_cron_installed
   when: rhel_07_020260
   tags:
@@ -815,8 +813,6 @@
         check_mode: no
         changed_when: no
         failed_when: no
-        args:
-            warn: false
         register: rhel_07_020260_rhel_type
 
       - block:
