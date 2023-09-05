@@ -3,8 +3,6 @@
   block:
       - name: "PRELIM | Check for dconf availability"
         command: rpm -q dconf
-        args:
-            warn: no
         changed_when: no
         check_mode: no
         failed_when: rhel7stig_dconf_audit.rc >= 2

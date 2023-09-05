@@ -137,8 +137,6 @@
   block:
       - name: "MEDIUM | RHEL-07-010090 | AUDIT | The Red Hat Enterprise Linux operating system must have the screen package installed. Check for screen or tmux"
         command: rpm -q screen tmux
-        args:
-            warn: no
         check_mode: no
         register: rhel_07_010090_audit
         changed_when: rhel_07_010090_audit.rc > 1
@@ -580,7 +578,7 @@
       - pamd
 
 - name: "MEDIUM | RHEL-07-010340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation."
-  replace:
+  ansible.builtin.replace:
       path: "{{ item }}"
       regexp: '^([^#].*)NOPASSWD(.*)'
       replace: '\1PASSWD\2'
@@ -594,7 +592,7 @@
       - sudoers
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation."
-  replace:
+  ansible.builtin.replace:
       path: "{{ item }}"
       regexp: '^([^#].*)!authenticate(.*)'
       replace: '\1authenticate\2'
@@ -1512,7 +1510,7 @@
 - name: "MEDIUM | RHEL-07-021620 | The Red Hat Enterprise Linux operating system must use a file integrity tool that is configured to use FIPS 140-2 approved cryptographic hashes for validating file contents and directories."
   block:
       - name: "Replace sha256+sha512 entries with sha512"
-        replace:
+        ansible.builtin.replace:
             path: /etc/aide.conf
             regexp: '([A-Z]+ = .*)(sha256\+sha512)(.*)'
             replace: '\1sha512\3'
@@ -1520,7 +1518,7 @@
         notify: "{{ rhel7stig_aide_handler }}"
 
       - name: "Replace sha256 entries with sha512"
-        replace:
+        ansible.builtin.replace:
             path: /etc/aide.conf
             regexp: '([A-Z]+ = .*)(sha256)(.*)'
             replace: '\1sha512\3'
@@ -1934,7 +1932,7 @@
       - rsyslog
 
 - name: "MEDIUM | RHEL-07-031010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the rsyslog daemon does not accept log messages from other servers unless the server is being used for log aggregation."
-  replace:
+  ansible.builtin.replace:
       path: /etc/rsyslog.conf
       regexp: '({{ item }})'
       replace: '# \1'
@@ -2375,7 +2373,7 @@
             state: present
 
       - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-        replace:
+        ansible.builtin.replace:
             dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
             regexp: '^server \S+( \w+)?$'
         notify: restart {{ rhel7stig_time_service }}
@@ -2530,8 +2528,6 @@
   block:
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
         command: rpm -q postfix
-        args:
-            warn: no
         failed_when: no
         check_mode: no
         changed_when: no
@@ -2692,7 +2688,7 @@
       - sssd
 
 - name: "MEDIUM | RHEL-07-041003 | The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication."
-  replace:
+  ansible.builtin.replace:
       path: /etc/pam_pkcs11/pam_pkcs11.conf
       regexp: (?im)^([ \t]*cert_policy[ \t]*=(?:[^ \t\n]|[ \t](?!ocsp_on,))*?)(?:[ \t]ocsp_on,[ \t]*)?[ \t]*((?:[^,\n]|,(?![ \t]*ocsp_on,))*?)(?:,[ \t]*ocsp_on)?;$
       replace: '\1 ocsp_on, \2;'
@@ -2704,8 +2700,6 @@
   block:
       - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if nmcli command is available"
         command: rpm -q NetworkManager
-        args:
-            warn: no
         check_mode: no
         changed_when: no
         register: rhel_07_nmcli_available
